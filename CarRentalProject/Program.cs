@@ -4,6 +4,7 @@ using DataAccess.Concrete.Entity_Framework;
 using Entities.Concrete;
 using DataAccess.EntityFramework;
 using DataAccess.Concrete.InMemory;
+using System.Linq;
 
 namespace ConsoleUI
 {
@@ -17,9 +18,9 @@ namespace ConsoleUI
 
 
             Console.WriteLine("****************ARABA LİSTESİ****************");
-            foreach (var car in carManager.GetAll())
+            foreach (var car in carManager.GetProductDetails())
             {
-                Console.WriteLine("\r\n" + "Araba İsmi = " + " " + car.CarName + "\r\n" + "Araba Numarası = " + " " + car.CarId + "\r\n" + "Marka Numarası = " + " " + car.BrandId + "\r\n" + "Renk Numarası = " + " " + car.ColorId + "\r\n" + "Model Yılı = " + " " + car.ModelYear + "\r\n" + "Arabanın Açıklaması = " + " " + car.Description);
+                Console.WriteLine(car.CarName + " / " + car.DailyPrice);
                 Console.WriteLine("---------------------------------------------------------------------------------------");
             }
         }

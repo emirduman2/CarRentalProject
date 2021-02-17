@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -55,6 +56,11 @@ namespace Business.Concrete
         public List<Car> GetCarsByColorId(int colorId)
         {
             return _carDal.GetAll(p=> p.ColorId == colorId);
+        }
+
+        public List<CarDetailDto> GetProductDetails()
+        {
+            return _carDal.GetProductDetails();
         }
 
         public void Update(Car car)
