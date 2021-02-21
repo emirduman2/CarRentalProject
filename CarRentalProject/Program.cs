@@ -5,6 +5,7 @@ using Entities.Concrete;
 using DataAccess.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using System.Linq;
+using Business.Constants;
 
 namespace ConsoleUI
 {
@@ -16,13 +17,22 @@ namespace ConsoleUI
             BrandManager brandManager = new BrandManager(new EfBrandDal());
             ColorManager colorManager = new ColorManager(new EfColorDal());
 
+            var result = carManager.GetProductDetails();
 
-            Console.WriteLine("****************ARABA LİSTESİ****************");
-            foreach (var car in carManager.GetProductDetails())
+            if (result.Success == true)
             {
-                Console.WriteLine(car.CarName + " / " + car.DailyPrice);
-                Console.WriteLine("---------------------------------------------------------------------------------------");
+                Console.WriteLine("****************ARABA LİSTESİ****************");
+                foreach (var car in result.Data)
+                {
+                    Console.WriteLine(car.CarName + " / " + car.DailyPrice);
+                    Console.WriteLine("---------------------------------------------------------------------------------------");
+                }
             }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+
         }
     }
 }
