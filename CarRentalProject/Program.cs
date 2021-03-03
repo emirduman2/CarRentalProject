@@ -8,6 +8,7 @@ using DataAccess.Concrete.InMemory;
 using System.Linq;
 using Business.Constants;
 using Core.Utilities.Results;
+using Entities.DTOs;
 
 namespace ConsoleUI
 {
@@ -16,17 +17,26 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             //CarDetails();
+            //GetRentalDetails();
+        }
+        
+        
+        
+        
 
-
+        private static void GetRentalDetails()
+        {
             RentalManager rentalManager = new RentalManager(new EfRentalDal());
 
-            rentalManager.Add(new Rental {CarId = 2, CustomerId = 2, RentalId = 2, RentDate = DateTime.Now, ReturnDate = null});
+            rentalManager.Add(new Rental {CustomerId = 2, RentDate = DateTime.Now, ReturnDate = null});
 
             foreach (var rentall in rentalManager.GetRentalDetailDtos().Data)
             {
-                Console.WriteLine("Kiralama Numarası : " + rentall.RentalId + "\r\n" + " Kullanıcı Adı : " +  rentall.UserName + "\r\n" + " Müşteri Adı : " + rentall.CustomerName + "\r\n" +  " Marka Adı :  " + rentall.BrandName + "\r\n" +  " Kiralama Tarihi : " + rentall.RentDate + "\r\n" + " Kiralama Dönüş Tarihi : " +  rentall.ReturnDate);
+                Console.WriteLine("Kiralama Numarası : " + rentall.RentalId + "\r\n" + " Kullanıcı Adı : " + rentall.UserName +
+                                  "\r\n" + " Müşteri Adı : " + rentall.CustomerName + "\r\n" + " Marka Adı :  " +
+                                  rentall.BrandName + "\r\n" + " Kiralama Tarihi : " + rentall.RentDate + "\r\n" +
+                                  " Kiralama Dönüş Tarihi : " + rentall.ReturnDate);
             }
-            
         }
 
         private static void CarDetails()

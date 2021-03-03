@@ -5,6 +5,7 @@ using Business.Abstract;
 using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.EntityFramework;
 using Entities.Concrete;
 using Entities.DTOs;
 
@@ -41,26 +42,30 @@ namespace Business.Concrete
         
         public IResult Add(Rental rental)
         {
-            if (rental.ReturnDate == null && rental.ReturnDate > DateTime.Now)
-            {
-                return new ErrorResult(Messages.TimeError);
-            }
-            else
-            {
-                _rentalDal.Add(rental);
-                return new SuccessResult(Messages.CarRented);
-            }
+            CarRentalProjectContext context = new CarRentalProjectContext();
+            
+            _rentalDal.Add(rental);
+            context.SaveChanges();
+            return new SuccessResult(Messages.CarRented);
         }
 
         public IResult Delete(Rental rental)
         {
+            CarRentalProjectContext context = new CarRentalProjectContext();
+            
             _rentalDal.Delete(rental);
+            context.SaveChanges();
+            
             return new SuccessResult();
         }
 
         public IResult Update(Rental rental)
         {
+            CarRentalProjectContext context = new CarRentalProjectContext();
+            
             _rentalDal.Update(rental);
+            context.SaveChanges();
+            
             return new SuccessResult();
         }
 
