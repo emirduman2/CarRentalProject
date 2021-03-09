@@ -23,11 +23,55 @@ namespace WebAPI.Controllers
             _carService = carService;
         }
 
-        [HttpGet("get")] 
-        public List<Car> Get()
+        [HttpGet("getall")] 
+        public IActionResult GetAll()
         {
             var result = _carService.GetAll();
-            return result.Data;
+
+            if (result.Success == true)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpGet("GetById")]
+        public IActionResult GetById(int id)
+        {
+            var result = _carService.GetById(id);
+            if (result.Success == true)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("Delete")]
+        public IActionResult DeleteCar(Car car)
+        {
+            var result = _carService.Delete(car);
+            if (result.Success == true)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result.Message);
+        }
+        
+        
+
+        [HttpPost("Add")]
+        public IActionResult Add(Car car) // Post olduğu için, ne istediğimizi buraya yazıyoruz.
+        {
+            var result = _carService.Add(car);
+            if (result.Success == true)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result.Message);
         }
     }
 }

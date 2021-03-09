@@ -27,25 +27,21 @@ namespace Business.Concrete
                 _carDal.Add(car);
                 return new SuccessResult(Messages.CarAdded);
             }
-            else
-            {
-                return new ErrorResult(Messages.CarNameInvalid);
-            }
+            return new ErrorResult(Messages.CarNameInvalid);
         }
 
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
-
-            return new SuccessResult(Messages.CarDeleted);
+            return new SuccessResult();
         }
 
         public IDataResult<List<Car>> GetAll()
         {
-            // if (DateTime.Now.Hour == 24)
-            // {
-            //     return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            // }
+            if (DateTime.Now.Hour == 22)
+            {
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+            }
 
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }

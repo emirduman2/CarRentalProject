@@ -4,6 +4,8 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Business.Constants;
+using Core.Utilities.Results;
 
 namespace Business.Concrete
 {
@@ -16,29 +18,41 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
-        public void Add(Color color)
+        public IResult Add(Color color)
         {
-            _colorDal.Add(color);
+            if (color.ColorName.Length > 2)
+            {
+                _colorDal.Add(color);
+                return new SuccessResult();
+            }
+
+            return new ErrorResult();
         }
 
-        public void Delete(Color color)
+        public IResult Delete(Color color)
         {
             _colorDal.Delete(color);
+            return new SuccessResult();
         }
 
-        public List<Color> GetAll()
+        public IDataResult<List<Color>> GetAll()
         {
-            return _colorDal.GetAll();
+            if (DateTime.Now.Hour == 22)
+            {
+                return new ErrorDataResult<List<Color>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
         }
 
-        public Color GetById(int id)
+        public IDataResult<List<Color>> GetById(int id)
         {
-            return _colorDal.Get(c=> c.ColorId == id);
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(c => c.ColorId == id));
         }
 
-        public void Update(Color color)
+        public IResult Update(Color color)
         {
             _colorDal.Update(color);
+            return new SuccessResult();
         }
     }
 }
