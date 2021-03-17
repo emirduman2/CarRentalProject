@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 
 namespace Business.Concrete
@@ -18,15 +20,12 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
+        [ValidationAspect((typeof(ColorValidator)))]
         public IResult Add(Color color)
         {
-            if (color.ColorName.Length > 2)
-            {
-                _colorDal.Add(color);
-                return new SuccessResult();
-            }
+            _colorDal.Add(color);
 
-            return new ErrorResult();
+            return new SuccessResult();
         }
 
         public IResult Delete(Color color)

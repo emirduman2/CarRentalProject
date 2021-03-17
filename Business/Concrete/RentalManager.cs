@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.EntityFramework;
@@ -40,12 +42,10 @@ namespace Business.Concrete
             return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.CustomerId == rentalCustomerId));
         }
         
+        [ValidationAspect((typeof(RentalValidator)))]
         public IResult Add(Rental rental)
         {
-            CarRentalProjectContext context = new CarRentalProjectContext();
-            
             _rentalDal.Add(rental);
-            context.SaveChanges();
             return new SuccessResult(Messages.CarRented);
         }
 

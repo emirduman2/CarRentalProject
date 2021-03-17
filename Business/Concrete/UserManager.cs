@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -41,17 +43,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<User>>(_userDal.GetAll(u=> u.FirstName + u.LastName == userName));
         }
 
+        [ValidationAspect((typeof(UserValidator)))]
         public IResult Add(User user)
         {
-            if (user.FirstName.Length < 2 && user.LastName.Length < 2 && user.Password.Length < 6)
-            {
-                return new ErrorResult(Messages.AddFailed);
-            }
-            else
-            {
-                _userDal.Add(user);
-                return new SuccessResult(Messages.UserAdded);
-            }
+            _userDal.Add(user);
+            return new SuccessResult(Messages.UserAdded);
         }
 
         public IResult Delete(User user)

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.EntityFramework;
 
@@ -24,15 +26,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(b => b.BrandId == id));
         }
 
+        [ValidationAspect((typeof(BrandValidator)))]
         public IResult Add(Brand brand)
         {
-            if (brand.BrandName.Length > 2)
-            {
-                _brandDal.Add(brand);
-                return new SuccessResult();
-            }
-
-            return new ErrorResult();
+            _brandDal.Add(brand);
+            return new SuccessResult();
         }
 
         public IResult Delete(Brand brand)
