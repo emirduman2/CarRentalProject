@@ -55,10 +55,15 @@ namespace WebAPI
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors(x => x
+                .SetIsOriginAllowed(origin => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
