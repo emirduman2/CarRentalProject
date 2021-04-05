@@ -12,10 +12,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Business.Concrete;
+using Core.DependencyResolvers;
+using Core.Extensions;
+using Core.Utilities.IoC;
+using Core.Utilities.Security.Encryption;
+using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using DataAccess.Concrete.Entity_Framework;
 using DataAccess.Concrete.InMemory;
 using DataAccess.EntityFramework;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
 
 namespace WebAPI
 {
@@ -32,6 +40,8 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // services.AddSingleton<ICarService, CarManager>();
             // services.AddSingleton<ICarDal,EfCarDal>();
             // services.AddSingleton<IBrandService, BrandManager>();
@@ -44,7 +54,31 @@ namespace WebAPI
             // services.AddSingleton<IRentalDal, EfRentalDal>();
             // services.AddSingleton<IUserService, UserManager>();
             // services.AddSingleton<IUserDal, EfUserDal>();
+
+
+            var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = tokenOptions.Issuer,
+                        ValidAudience = tokenOptions.Audience,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+                    };
+                });
+
+            services.AddDependencyResolvers(new ICoreModule[]
+            {
+                new CoreModule()
+            });
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -61,14 +95,14 @@ namespace WebAPI
                 .AllowAnyHeader()
                 .AllowCredentials());
             app.UseRouting();
+
+
+            //app.UseAuthentication();
             app.UseStaticFiles();
             app.UseAuthorization();
             app.UseAuthentication();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

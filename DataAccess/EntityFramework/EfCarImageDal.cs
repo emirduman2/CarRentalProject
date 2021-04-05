@@ -8,13 +8,13 @@ namespace DataAccess.EntityFramework
 {
     public class EfCarImageDal : EfEntityRepositoryBase<CarImage, CarRentalProjectContext>, ICarImageDal
     {
-        public bool IsExist(int id)
-        {
-            using (CarRentalProjectContext context = new CarRentalProjectContext())
-            {
-                return context.CarImages.Any(p => p.ImageId == id);
-            }
-
-        }
+        // public bool IsExist(int id)
+        // {
+        //     using (CarRentalProjectContext context = new CarRentalProjectContext())
+        //     {
+        //         return context.CarImages.Any(p => p.Id == id);
+        //     }
+        //
+        // }
     }
 }

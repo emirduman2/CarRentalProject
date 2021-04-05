@@ -18,6 +18,15 @@ namespace ConsoleUI
         {
             //CarDetails();
             //GetRentalDetails();
+            //CarImage ci = new CarImage();
+            //ci.CarId = 2;
+            //ci.ImagePath = "asdasd";
+            //ci.Date = DateTime.Now;
+
+
+            //CarImageManager cm = new CarImageManager(new EfCarImageDal());
+            //cm.Add(ci, null);
+
         }
         
         

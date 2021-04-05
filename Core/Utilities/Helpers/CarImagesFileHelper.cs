@@ -8,7 +8,7 @@ namespace Core.Utilities.Helpers
     public class CarImagesFileHelper
     {
         static string directory = Directory.GetCurrentDirectory() + @"\wwwroot\";
-        static string path = @"Images\";
+        static string path = @"images\";
         public static string Add(IFormFile file)
         {
             string extension = Path.GetExtension(file.FileName).ToUpper();
@@ -34,7 +34,7 @@ namespace Core.Utilities.Helpers
         public static void Delete(string imagePath)
         {
             if (File.Exists(directory + imagePath.Replace("/", "\\")) 
-                && Path.GetFileName(imagePath)!="default.png"){
+                && Path.GetFileName(imagePath)!="default.jpg"){
                 File.Delete(directory + imagePath.Replace("/", "\\"));
             }
         }

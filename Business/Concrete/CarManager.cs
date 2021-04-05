@@ -6,9 +6,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Linq;
+using Business.BusinessAspects.Autofac;
 using Business.CCS;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
@@ -28,6 +32,8 @@ namespace Business.Concrete
         }
 
         [ValidationAspect((typeof(CarValidator)))]
+        [SecuredOperation("product.add, admin")]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Car car)
         {
             IResult result = BusinessRules.Run(CheckIfCarNameExits(car.CarName));
@@ -40,13 +46,16 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarAdded);
             
         }
-
+        [SecuredOperation("admin, moderator")]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
             return new SuccessResult();
         }
 
+        [CacheAspect]
+        [SecuredOperation("admin, moderator")]
         public IDataResult<List<Car>> GetAll()
         {
             if (DateTime.Now.Hour == 22)
@@ -57,19 +66,31 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }
 
+        [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<Car> GetById(int id)
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.CarId == id));
         }
 
+        [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == brandId));
         }
 
+        [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(p=> p.ColorId == colorId));
+        }
+
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Car car)
+        {
+            throw new NotImplementedException();
         }
 
         public IDataResult<List<CarDetailDto>> GetProductDetails()
@@ -77,6 +98,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetProductDetails());
         }
 
+        [CacheRemoveAspect("IProductService.Get")]
+        [SecuredOperation("admin, moderator")]
         public IResult Update(Car car)
         {
             _carDal.Update(car);

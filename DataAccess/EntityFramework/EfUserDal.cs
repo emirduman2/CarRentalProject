@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DataAccess.EntityFramework
 {
-    public class EfUserClaimDal : EfEntityRepositoryBase<User, CarRentalProjectContext>, IUserClaimDal
+    public class EfUserDal : EfEntityRepositoryBase<User, CarRentalProjectContext>, IUserDal
     {
         public List<OperationClaim> GetClaims(User userInformation)
         {

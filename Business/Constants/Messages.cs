@@ -26,5 +26,8 @@ namespace Business.Constants
         public static string InvalidImageExtension = "Geçersiz dosya uzantısı, fotoğraf için kabul edilen uzantılar" + string.Join(",", ValidImageFileTypes);
         public static string CarImageMustBeExists = "Böyle bi resim bulunamadı";
         public static string CarHaveNoImage = "Arabaya ait bi resim yok";
+        public static string CarImagesAdded = "Arac Eklendi";
+        public static string AuthorizationDenied = "Yetkiniz Reddedildi.";
+        public static string RegisterSuccess = "Kayıt başarılı.";
     }
 }

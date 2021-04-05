@@ -56,10 +56,6 @@ namespace WebAPI.Controllers
         [HttpPost("add")]
         public IActionResult Add([FromForm] CarImage carImage, [FromForm] IFormFile file)
         {
-            if (file == null)
-            {
-                return BadRequest("Boş resim gönderemezsin");
-            }
             IResult result = _carImageService.Add(carImage,file);
             if (result.Success)
             {
@@ -71,10 +67,6 @@ namespace WebAPI.Controllers
         [HttpPut("update")]
         public IActionResult Update([FromForm] CarImage carImage, [FromForm] IFormFile file)
         {
-            if (file == null)
-            {
-                return BadRequest("Boş resim gönderemezsin");
-            }
             IResult result = _carImageService.Update(carImage, file);
             if (result.Success)
             {

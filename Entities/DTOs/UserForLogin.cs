@@ -1,7 +1,10 @@
-﻿namespace Entities.DTOs
+﻿using Core;
+
+namespace Entities.DTOs
 {
-    public class UserForLogin
+    public class UserForLoginDto:IDto
     {
-        
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }
